@@ -1,0 +1,1180 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Stroke Prediction Model</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-interactiveBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="22e14c52-e400-417e-a86b-238cce545c1b" class="page sans"><header><h1 class="page-title">Stroke Prediction Model</h1><p class="page-description"></p></header><div class="page-body"><p id="7ba2b441-4ae3-4dad-96e7-22feb32d8acb" class="">
+</p><p id="1d85102f-2eef-4554-81b1-87965493a9a6" class="">Project in Progress</p><p id="3193bf7e-4f89-4adf-b4ba-c074839b68c8" class="">Preliminary code </p><p id="1ed3c328-c923-4523-8114-c5ae4aefef0f" class="">Mass Effect Graph provided</p><p id="0c5252bf-23ef-4c50-a5bc-ffb7a601fa63" class="">Further Modeling and Accuracy needed</p><p id="5548854a-60dd-4f73-ae3d-a6449737f314" class="">
+</p><p id="18029e61-536d-476a-900b-5f96776c7a9f" class="">
+</p><pre id="b6626bc2-4ea3-4dee-aca9-9d6c5a78d4aa" class="code"><code># Relevant Packages
+library(pacman)
+p_load(tidyverse, ggthemes, caret, mice, VIM, rpart, rpart.plot, effects, ggpubr, ROSE, pROC)
+
+# Load Data
+stroke &lt;- read_csv(&quot;/Users/mohan/Desktop/Projects/26 Projects/Stroke Model/healthcare-dataset-stroke-data.csv&quot;) %&gt;%
+  select(-c(id))
+
+# Convert variables to appropriate data types
+stroke &lt;- stroke %&gt;%
+  mutate(smoking_status = as.factor(smoking_status),
+         bmi = as.character(bmi),
+         bmi = gsub(&quot;[^0-9.]&quot;, &quot;&quot;, bmi),
+         bmi = as.numeric(bmi),
+         work_type = as.factor(work_type),
+         hypertension = as.factor(hypertension),
+         Residence_type = as.factor(Residence_type),
+         stroke = as.factor(stroke),
+         ever_married = as.factor(ever_married),
+         heart_disease = as.factor(heart_disease),
+         gender = factor(gender, levels = c(&quot;Male&quot;, &quot;Female&quot;)))
+
+
+
+# Handle missing values in bmi
+stroke &lt;- stroke %&gt;%
+  mutate(bmi = ifelse(is.na(bmi), mean(bmi, na.rm = TRUE), bmi))
+
+# Data Partitioning
+set.seed(123)
+index &lt;- createDataPartition(stroke$stroke, p = 0.7, list = FALSE)
+train &lt;- stroke[index, ]
+test &lt;- stroke[-index, ]
+
+n_majority &lt;- 1000  # Set the desired number of majority class samples
+
+# Balancing the dataset
+train_balanced &lt;- ROSE(stroke ~ ., data = train, seed = 123, N = n_majority, p = 0.5)$data
+train_balanced$stroke &lt;- factor(train_balanced$stroke, levels = c(&quot;0&quot;, &quot;1&quot;))
+
+# Model Building
+dt_model &lt;- rpart(stroke ~ ., data = train_balanced, method = &quot;class&quot;)
+
+# Predict on the test set
+predictions &lt;- predict(dt_model, test, type = &quot;class&quot;)
+
+# Convert test$stroke to factor with levels &quot;0&quot; and &quot;1&quot;
+test$stroke &lt;- factor(test$stroke, levels = c(&quot;0&quot;, &quot;1&quot;))
+
+# Calculate AUC
+roc &lt;- pROC::roc(test$stroke, as.numeric(predictions))
+
+# Imputation
+imput &lt;- mice(stroke, maxit = 0)
+meth &lt;- imput$method
+predM &lt;- imput$predictorMatrix
+predM[, &quot;bmi&quot;] &lt;- 0
+set.seed(103)
+imputed &lt;- mice(stroke, method = meth, predictorMatrix = predM, m = 5)
+stroke &lt;- complete(imputed)
+
+# Visualizations
+# Gender
+gender.dist &lt;- tibble(gender = c(&quot;Female&quot;, &quot;Male&quot;),
+                      total = as.numeric(table(stroke$gender))) %&gt;%
+  mutate(gender.percent = round((total / sum(total) * 100))) %&gt;%
+  ggplot(aes(x = &quot;&quot;, y = gender.percent, fill = gender)) +
+  geom_bar(stat = &quot;identity&quot;, color = &quot;black&quot;) +
+  coord_polar(&quot;y&quot;, start = 0) +
+  theme_void() +
+  scale_fill_manual(values = c(&quot;#E0BBE4&quot;, &quot;#FFDFD3&quot;, &quot;#957DAD&quot;)) +
+  geom_text(aes(label = paste0(gender.percent, &quot;%&quot;)))
+
+gender.dist
+
+# How many people in the dataset had a stroke
+outcomes &lt;- tibble(outcome = c(&quot;No Stroke&quot;, &quot;Stroke&quot;),
+                   total = as.integer(table(stroke$stroke)))
+
+outcome.dist &lt;- outcomes %&gt;%
+  mutate(stroke.percent = round((total / sum(total)) * 100)) %&gt;% 
+  mutate(ypos = cumsum(stroke.percent) - 0.5 * stroke.percent)
+
+
+# Handle missing values in bmi
+stroke &lt;- stroke %&gt;%
+  mutate(bmi = ifelse(is.na(bmi), mean(bmi, na.rm = TRUE), bmi))
+
+# Data Partitioning
+set.seed(123)
+index &lt;- createDataPartition(stroke$stroke, p = 0.7, list = FALSE)
+train &lt;- stroke[index, ]
+test &lt;- stroke[-index, ]
+
+# Balancing the dataset
+train_balanced &lt;- ROSE(stroke ~ ., data = train, seed = 123, N = n_majority, p = 0.5)$data
+train_balanced$stroke &lt;- factor(train_balanced$stroke, levels = c(&quot;0&quot;, &quot;1&quot;))
+
+# Model Building
+dt_model &lt;- rpart(stroke ~ ., data = train_balanced, method = &quot;class&quot;)
+
+# Predict on the test set
+predictions &lt;- predict(dt_model, test, type = &quot;class&quot;)
+
+# Convert test$stroke to factor with levels &quot;0&quot; and &quot;1&quot;
+test$stroke &lt;- factor(test$stroke, levels = c(&quot;0&quot;, &quot;1&quot;))
+
+# Calculate AUC
+roc &lt;- pROC::roc(test$stroke, as.numeric(predictions))
+
+# Imputation
+imput &lt;- mice(stroke, maxit = 0)
+meth &lt;- imput$method
+predM &lt;- imput$predictorMatrix
+predM[, &quot;bmi&quot;] &lt;- 0
+set.seed(103)
+imputed &lt;- mice(stroke, method = meth, predictorMatrix = predM, m = 5)
+stroke &lt;- complete(imputed)
+
+# Visualizations
+# Gender
+gender.dist &lt;- tibble(gender = c(&quot;Female&quot;, &quot;Male&quot;),
+                      total = as.numeric(table(stroke$gender))) %&gt;%
+  mutate(gender.percent = round((total / sum(total) * 100))) %&gt;%
+  ggplot(aes(x = &quot;&quot;, y = gender.percent, fill = gender)) +
+  geom_bar(stat = &quot;identity&quot;, color = &quot;black&quot;) +
+  coord_polar(&quot;y&quot;, start = 0) +
+  theme_void() +
+  scale_fill_manual(values = c(&quot;#E0BBE4&quot;, &quot;#FFDFD3&quot;, &quot;#957DAD&quot;)) +
+  geom_text(aes(label = paste0(gender.percent, &quot;%&quot;)))
+
+gender.dist
+
+# How many people in the dataset had a stroke
+outcomes &lt;- tibble(outcome = c(&quot;No Stroke&quot;, &quot;Stroke&quot;),
+                   total = as.integer(table(stroke$stroke)))
+
+outcome.dist &lt;- outcomes %&gt;%
+  mutate(stroke.percent = round((total / sum(total)) * 100)) %&gt;% 
+  mutate(ypos = cumsum(stroke.percent) - 0.5 * stroke.percent)
+
+outcome.dist
+
+# Feature Engineering
+
+
+
+# Age Binning
+stroke$age_group &lt;- cut(stroke$age, breaks = c(0, 18, 40, 60, max(stroke$age)), labels = c(&quot;0-18&quot;, &quot;19-40&quot;, &quot;41-60&quot;, &quot;61+&quot;))
+
+
+# BMI Category
+stroke$bmi_category &lt;- cut(stroke$bmi, breaks = c(0, 18.5, 25, 30, max(stroke$bmi)),
+                           labels = c(&quot;Underweight&quot;, &quot;Normal&quot;, &quot;Overweight&quot;, &quot;Obese&quot;))
+
+stroke$bmi &lt;- as.numeric(gsub(&quot;[^0-9.]&quot;, &quot;&quot;, trimws(stroke$bmi)))
+
+# Data Visualization
+# Age Group Distribution
+age_group_dist &lt;- stroke %&gt;%
+  group_by(age_group) %&gt;%
+  summarize(total = n()) %&gt;%
+  mutate(age_group_percent = round((total / sum(total)) * 100)) %&gt;%
+  ggplot(aes(x = age_group, y = age_group_percent, fill = age_group)) +
+  geom_bar(stat = &quot;identity&quot;, color = &quot;black&quot;) +
+  theme_minimal() +
+  xlab(&quot;Age Group&quot;) +
+  ylab(&quot;Percentage&quot;) +
+  ggtitle(&quot;Distribution by Age Group&quot;) +
+  geom_text(aes(label = paste0(age_group_percent, &quot;%&quot;)), vjust = -0.5) +
+  theme(legend.position = &quot;none&quot;)
+
+age_group_dist
+
+# BMI Category Distribution
+bmi_category_dist &lt;- stroke %&gt;%
+  group_by(bmi_category) %&gt;%
+  summarize(total = n()) %&gt;%
+  mutate(bmi_category_percent = round((total / sum(total)) * 100)) %&gt;%
+  ggplot(aes(x = bmi_category, y = bmi_category_percent, fill = bmi_category)) +
+  geom_bar(stat = &quot;identity&quot;, color = &quot;black&quot;) +
+  theme_minimal() +
+  xlab(&quot;BMI Category&quot;) +
+  ylab(&quot;Percentage&quot;) +
+  ggtitle(&quot;Distribution by BMI Category&quot;) +
+  geom_text(aes(label = paste0(bmi_category_percent, &quot;%&quot;)), vjust = -0.5) +
+  theme(legend.position = &quot;none&quot;)
+
+bmi_category_dist
+
+# Model Evaluation
+# Confusion Matrix
+confusion_matrix &lt;- confusionMatrix(predictions, test$stroke)
+confusion_matrix
+
+# Accuracy
+accuracy &lt;- confusion_matrix$overall[&quot;Accuracy&quot;]
+accuracy
+
+# AUC
+auc &lt;- roc$auc
+auc
+
+# Sensitivity and Specificity
+sensitivity &lt;- confusion_matrix$byClass[&quot;Sensitivity&quot;]
+specificity &lt;- confusion_matrix$byClass[&quot;Specificity&quot;]
+sensitivity
+specificity
+
+library(ggplot2)
+library(gridExtra)
+
+# Demographics based on all categories
+gender_plot &lt;- ggplot(stroke, aes(x = gender)) +
+  geom_bar() +
+  labs(x = &quot;Gender&quot;, y = &quot;Count&quot;) +
+  ggtitle(&quot;Distribution of Gender&quot;)
+
+age_plot &lt;- ggplot(stroke, aes(x = age)) +
+  geom_histogram() +
+  labs(x = &quot;Age&quot;, y = &quot;Count&quot;) +
+  ggtitle(&quot;Distribution of Age&quot;)
+
+ever_married_plot &lt;- ggplot(stroke, aes(x = ever_married)) +
+  geom_bar() +
+  labs(x = &quot;Marital Status&quot;, y = &quot;Count&quot;) +
+  ggtitle(&quot;Distribution of Marital Status&quot;)
+
+work_type_plot &lt;- ggplot(stroke, aes(x = work_type)) +
+  geom_bar() +
+  labs(x = &quot;Work Type&quot;, y = &quot;Count&quot;) +
+  ggtitle(&quot;Distribution of Work Type&quot;)
+
+residence_type_plot &lt;- ggplot(stroke, aes(x = Residence_type)) +
+  geom_bar() +
+  labs(x = &quot;Residence Type&quot;, y = &quot;Count&quot;) +
+  ggtitle(&quot;Distribution of Residence Type&quot;)
+
+# Demographics for those who had a stroke
+stroke_subset &lt;- subset(stroke, stroke == 1)
+
+gender_stroke_plot &lt;- ggplot(stroke_subset, aes(x = gender)) +
+  geom_bar() +
+  labs(x = &quot;Gender&quot;, y = &quot;Count&quot;) +
+  ggtitle(&quot;Distribution of Gender for Stroke Cases&quot;)
+
+age_stroke_plot &lt;- ggplot(stroke_subset, aes(x = age)) +
+  geom_histogram() +
+  labs(x = &quot;Age&quot;, y = &quot;Count&quot;) +
+  ggtitle(&quot;Distribution of Age for Stroke Cases&quot;)
+
+ever_married_stroke_plot &lt;- ggplot(stroke_subset, aes(x = ever_married)) +
+  geom_bar() +
+  labs(x = &quot;Marital Status&quot;, y = &quot;Count&quot;) +
+  ggtitle(&quot;Distribution of Marital Status for Stroke Cases&quot;)
+
+work_type_stroke_plot &lt;- ggplot(stroke_subset, aes(x = work_type)) +
+  geom_bar() +
+  labs(x = &quot;Work Type&quot;, y = &quot;Count&quot;) +
+  ggtitle(&quot;Distribution of Work Type for Stroke Cases&quot;)
+
+residence_type_stroke_plot &lt;- ggplot(stroke_subset, aes(x = Residence_type)) +
+  geom_bar() +
+  labs(x = &quot;Residence Type&quot;, y = &quot;Count&quot;) +
+  ggtitle(&quot;Distribution of Residence Type for Stroke Cases&quot;)
+
+# Clinical metrics
+hypertension_plot &lt;- ggplot(stroke, aes(x = hypertension)) +
+  geom_bar() +
+  labs(x = &quot;Hypertension&quot;, y = &quot;Count&quot;) +
+  ggtitle(&quot;Distribution of Hypertension&quot;)
+
+heart_disease_plot &lt;- ggplot(stroke, aes(x = heart_disease)) +
+  geom_bar() +
+  labs(x = &quot;Heart Disease&quot;, y = &quot;Count&quot;) +
+  ggtitle(&quot;Distribution of Heart Disease&quot;)
+
+bmi_plot &lt;- ggplot(stroke, aes(x = bmi)) +
+  geom_histogram() +
+  labs(x = &quot;BMI&quot;, y = &quot;Count&quot;) +
+  ggtitle(&quot;Distribution of BMI&quot;)
+
+glucose_level_plot &lt;- ggplot(stroke, aes(x = avg_glucose_level)) +
+  geom_histogram() +
+  labs(x = &quot;Average Glucose Level&quot;, y = &quot;Count&quot;) +
+  ggtitle(&quot;Distribution of Average Glucose Level&quot;)
+
+# First grid arrangement
+grid_arrange_1 &lt;- function(...) {
+  grid.arrange(..., ncol = 2)
+}
+
+# Second grid arrangement
+grid_arrange_2 &lt;- function(...) {
+  grid.arrange(..., ncol = 2)
+}
+
+# Arrange and display the graphs
+grid_arrange_1(
+  gender_plot, age_plot,
+  ever_married_plot, work_type_plot,
+  residence_type_plot, gender_stroke_plot,
+  age_stroke_plot, ever_married_stroke_plot,
+  nrow = 4
+)
+
+grid_arrange_2(
+  work_type_stroke_plot, residence_type_stroke_plot,
+  hypertension_plot, heart_disease_plot,
+  bmi_plot, glucose_level_plot,
+  nrow = 4
+)
+
+library(caret)
+library(ROSE)
+library(rpart.plot)
+
+set.seed(123)
+
+# Split the data into training and testing sets
+index &lt;- createDataPartition(stroke$stroke, p = 0.8, list = FALSE)
+train_data &lt;- stroke[index, ]
+test_data &lt;- stroke[-index, ]
+
+# Using ROSE for synthetic data generation (due to imbalanced nature of outcomes)
+oversampled_data &lt;- ovun.sample(stroke ~ ., data = train_data, method = &quot;over&quot;, N = 2 * nrow(train_data), seed = 123)$data
+
+# Build the binary tree model
+tree_model &lt;- rpart(stroke ~ .,
+                    data = oversampled_data, method = &quot;class&quot;, control = rpart.control(cp = 0.01))
+
+# Make predictions on the test data
+predictions &lt;- predict(tree_model, newdata = test_data, type = &quot;prob&quot;)
+
+# Adjust classification threshold for sensitivity improvement
+threshold &lt;- 0.
+predicted_class &lt;- as.numeric(predictions[, 2] &gt; threshold)
+
+
+# Calculate misclassification rate
+misclassification_rate &lt;- mean(predictions != test_data$stroke)
+
+# Print the binary tree
+printcp(tree_model)
+
+# Plot the binary tree
+rpart.plot(tree_model)
+
+# Evaluate variable importance
+var_importance &lt;- varImp(tree_model, scale = FALSE)
+
+# View variable importance
+print(var_importance)
+
+# Predict on test data
+test_pred &lt;- predict(tree_model, newdata = test_data, type = &quot;class&quot;)
+
+# Evaluate the model
+confusion_matrix &lt;- table(test_pred, test_data$stroke)
+accuracy &lt;- sum(diag(confusion_matrix)) / sum(confusion_matrix)
+misclassification_rate &lt;- 1 - accuracy
+
+# Calculate sensitivity, specificity, and F1 score
+sensitivity &lt;- confusion_matrix[2, 2] / sum(confusion_matrix[2, ])
+specificity &lt;- confusion_matrix[1, 1] / sum(confusion_matrix[1, ])
+precision &lt;- confusion_matrix[2, 2] / sum(confusion_matrix[, 2])
+f1_score &lt;- 2 * (precision * sensitivity) / (precision + sensitivity)
+
+# View the confusion matrix, misclassification rate, sensitivity, specificity, and F1 score
+print(confusion_matrix)
+print(paste(&quot;Misclassification Rate:&quot;, round(misclassification_rate, 4)))
+print(paste(&quot;Sensitivity:&quot;, round(sensitivity, 4)))
+print(paste(&quot;Specificity:&quot;, round(specificity, 4)))
+print(paste(&quot;F1 Score:&quot;, round(f1_score, 4)))
+
+
+library(caret)
+library(ROSE)
+library(randomForest)
+
+set.seed(123)
+
+# Split the data into training and testing sets
+index &lt;- createDataPartition(stroke$stroke, p = 0.8, list = FALSE)
+train_data &lt;- stroke[index, ]
+test_data &lt;- stroke[-index, ]
+
+# Using ROSE for synthetic data generation (due to imbalanced nature of outcomes)
+oversampled_data &lt;- ovun.sample(stroke ~ ., data = train_data, method = &quot;over&quot;, N = 2 * nrow(train_data), seed = 123)$data
+
+# Build the Random Forest model
+rf_model &lt;- randomForest(stroke ~ ., data = oversampled_data, importance = TRUE)
+
+# Make predictions on the test data
+predictions &lt;- predict(rf_model, newdata = test_data)
+
+# Evaluate the model
+confusion_matrix &lt;- table(predictions, test_data$stroke)
+accuracy &lt;- sum(diag(confusion_matrix)) / sum(confusion_matrix)
+misclassification_rate &lt;- 1 - accuracy
+
+sensitivity &lt;- confusion_matrix[2, 2] / sum(confusion_matrix[2, ])
+specificity &lt;- confusion_matrix[1, 1] / sum(confusion_matrix[1, ])
+
+# Calculate the F1 score manually
+precision &lt;- confusion_matrix[2, 2] / sum(confusion_matrix[, 2])
+recall &lt;- sensitivity
+f1_score &lt;- 2 * (precision * recall) / (precision + recall)
+
+# View the confusion matrix, performance metrics, and F1 score
+print(confusion_matrix)
+cat(&quot;Misclassification Rate:&quot;, misclassification_rate, &quot;\n&quot;)
+cat(&quot;Sensitivity:&quot;, sensitivity, &quot;\n&quot;)
+cat(&quot;Specificity:&quot;, specificity, &quot;\n&quot;)
+cat(&quot;F1 Score:&quot;, f1_score, &quot;\n&quot;)
+
+
+
+
+
+# Apply preprocessing to the training data
+preprocessed_data &lt;- preProcess(train_data, method = c(&quot;center&quot;, &quot;scale&quot;))
+
+# Transform the training data using the preprocessed data
+train_data_transformed &lt;- predict(preprocessed_data, train_data)
+
+# Train the logistic regression model
+logistic_model &lt;- glm(stroke ~ ., data = train_data_transformed, family = binomial())
+
+# View the summary of the model
+summary(logistic_model)
+
+# Apply the same preprocessing to the test data
+test_data_transformed &lt;- predict(preprocessed_data, test_data)
+
+# Make predictions on the test data
+pred &lt;- predict(logistic_model, newdata = test_data_transformed, type = &quot;response&quot;)
+
+# Convert predicted probabilities to class labels
+pred_class &lt;- ifelse(pred &gt; 0.5, 1, 0)
+
+# Evaluate the model performance using accuracy
+accuracy &lt;- mean(pred_class == test_data_transformed$stroke)
+print(accuracy)
+
+# Calculate true positives, true negatives, false positives, and false negatives
+tp &lt;- sum(pred_class == 1 &amp; test_data_transformed$stroke == 1)
+tn &lt;- sum(pred_class == 0 &amp; test_data_transformed$stroke == 0)
+fp &lt;- sum(pred_class == 1 &amp; test_data_transformed$stroke == 0)
+fn &lt;- sum(pred_class == 0 &amp; test_data_transformed$stroke == 1)
+
+# Calculate sensitivity (true positive rate)
+sensitivity &lt;- tp / (tp + fn)
+
+# Calculate specificity (true negative rate)
+specificity &lt;- tn / (tn + fp)
+
+# Calculate precision, recall, and F1 score
+precision &lt;- tp / (tp + fp)
+precision[is.nan(precision)] &lt;- 0  # Set precision to 0 if NaN
+
+recall &lt;- sensitivity
+recall[is.nan(recall)] &lt;- 0  # Set recall to 0 if NaN
+
+f1_score &lt;- ifelse((precision + recall) &gt; 0, 2 * (precision * recall) / (precision + recall), 0)
+
+
+# Calculate misclassification rate
+misclassification_rate &lt;- mean(pred_class != test_data_transformed$stroke)
+
+# Print the results
+cat(&quot;Misclassification Rate:&quot;, misclassification_rate, &quot;\n&quot;)
+cat(&quot;Sensitivity:&quot;, sensitivity, &quot;\n&quot;)
+cat(&quot;Specificity:&quot;, specificity, &quot;\n&quot;)
+cat(&quot;F1 Score:&quot;, f1_score, &quot;\n&quot;)
+
+
+
+
+# Fit the logistic regression model
+model &lt;- glm(stroke ~ age + hypertension + smoking_status + avg_glucose_level + bmi,
+             data = train_data_transformed, family = binomial())
+
+# Get the coefficients
+coefficients &lt;- coef(model)
+predictors &lt;- names(coefficients)[-1]  # Exclude the intercept
+
+# Compute the odds ratios
+odds_ratios &lt;- exp(coefficients[-1])
+names(odds_ratios) &lt;- predictors
+
+# Create a bar plot of the odds ratios
+barplot(odds_ratios, main = &quot;Effects of Factors on Stroke Risk&quot;,
+        xlab = &quot;Predictors&quot;, ylab = &quot;Odds Ratio&quot;, col = &quot;blue&quot;, ylim = c(0, max(odds_ratios) * 1.2))
+
+# Add error bars indicating the 95% confidence intervals
+errors &lt;- coef(summary(model))[-1, &quot;Std. Error&quot;]
+arrows(x0 = 1:length(predictors), y0 = odds_ratios - 1.96 * errors,
+       x1 = 1:length(predictors), y1 = odds_ratios + 1.96 * errors,
+       angle = 90, code = 3, length = 0.05)</code></pre><p id="ec08005b-68f4-4fd4-8afc-d10364962d34" class="">
+</p><p id="10220ff6-e7ab-4b81-a6a1-8168b1c2db53" class="">
+</p><figure id="bdb8355e-fe87-4a7a-a36c-6218c31781e6" class="image"><a href="Stroke%20Prediction%20Model%2022e14c52e400417ea86b238cce545c1b/Screen_Shot_2023-07-20_at_4.29.04_PM.png"><img style="width:1304px" src="Stroke%20Prediction%20Model%2022e14c52e400417ea86b238cce545c1b/Screen_Shot_2023-07-20_at_4.29.04_PM.png"/></a></figure></div></article></body></html>

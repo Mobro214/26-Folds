@@ -1,0 +1,846 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Breast Cancer Detection</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-interactiveBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="d6f84936-aa85-4cc6-b6a0-98d3b6b34a6b" class="page sans"><header><h1 class="page-title">Breast Cancer Detection</h1><p class="page-description"></p></header><div class="page-body"><p id="96d22c25-d827-4ece-92d8-d5e27818e0be" class="">
+</p><p id="588ac3f7-2e21-4b5e-bbf5-37d49887ae75" class="">Project is in Progress</p><p id="4cfad000-97ed-4618-81cc-e1115bfebb01" class="">Preliminary Code</p><p id="e2438eb1-9dee-485f-aa64-fa11e3223d8f" class="">Graphical Outputs provided</p><p id="2840b9b5-176d-44a0-a970-f0a82d8b3973" class="">Clean up Code and Further Model Building and Prediction</p><p id="5cc378f6-332a-4892-be45-71f613f3c478" class="">
+</p><p id="0f6e6950-fb04-4c1c-80bd-83dea098cf7d" class=""><a href="https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic">https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic</a></p><p id="a461e1d2-f6ef-459e-8cc9-e7a985efe180" class="">
+</p><pre id="8489614a-9985-4f62-a6aa-c4f697a69d18" class="code"><code>import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+
+
+# Step 1: Read the data from .data file
+data_file = &#x27;/Users/mohan/Desktop/Breast Cancer Detection/wdbc.data&#x27;
+column_headers = [&#x27;ID&#x27;, &#x27;Diagnosis&#x27;] + [f&#x27;Feature_{i}&#x27; for i in range(1, 31)]
+df = pd.read_csv(data_file, names=column_headers)
+
+# Step 2: Data Exploration and Visualization
+print(df.head())
+print(df.describe())
+print(df.info())
+# Pairplot - to visualize pairwise relationships in the dataset
+sns.pairplot(df, hue=&#x27;Diagnosis&#x27;, vars=[f&#x27;Feature_{i}&#x27; for i in range(1, 6)])
+plt.title(&quot;Pairplot of Features (Feature_1 to Feature_5)&quot;)
+plt.show()
+
+# Boxplot - to visualize the distribution of features by Diagnosis
+plt.figure(figsize=(10, 6))
+sns.boxplot(x=&#x27;Diagnosis&#x27;, y=&#x27;Feature_1&#x27;, data=df)
+plt.title(&quot;Boxplot of Feature_1 by Diagnosis&quot;)
+plt.show()
+
+# Heatmap - to visualize the correlation between features
+correlation_matrix = df.drop([&#x27;ID&#x27;, &#x27;Diagnosis&#x27;], axis=1).corr()
+plt.figure(figsize=(12, 10))
+sns.heatmap(correlation_matrix, annot=True, cmap=&#x27;coolwarm&#x27;)
+plt.title(&quot;Correlation Heatmap of Features&quot;)
+plt.show()
+# Step 3: Feature Selection
+# If you have specific feature selection techniques in mind, apply them here.
+
+# Step 4: Preprocessing
+X = df.drop([&#x27;ID&#x27;, &#x27;Diagnosis&#x27;], axis=1)
+y = df[&#x27;Diagnosis&#x27;].map({&#x27;M&#x27;: 1, &#x27;B&#x27;: 0})
+
+# Step 5: Train-Test Split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Step 6: Model Selection and Training
+# Logistic Regression
+lr_model = LogisticRegression()
+lr_model.fit(X_train, y_train)
+
+# Random Forest
+rf_model = RandomForestClassifier()
+rf_model.fit(X_train, y_train)
+
+# Support Vector Machine (SVM)
+svm_model = SVC(probability=True)
+svm_model.fit(X_train, y_train)
+
+# Step 7: Model Evaluation
+def evaluate_model(model, X_test, y_test):
+    y_pred = model.predict(X_test)
+    y_prob = model.predict_proba(X_test)[:, 1]
+    accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
+    roc_auc = roc_auc_score(y_test, y_prob)
+    print(f&quot;Accuracy: {accuracy:.2f}&quot;)
+    print(f&quot;Precision: {precision:.2f}&quot;)
+    print(f&quot;Recall: {recall:.2f}&quot;)
+    print(f&quot;F1 Score: {f1:.2f}&quot;)
+    print(f&quot;ROC-AUC: {roc_auc:.2f}\n&quot;)
+
+print(&quot;Logistic Regression Metrics:&quot;)
+evaluate_model(lr_model, X_test, y_test)
+
+print(&quot;Random Forest Metrics:&quot;)
+evaluate_model(rf_model, X_test, y_test)
+
+print(&quot;SVM Metrics:&quot;)
+evaluate_model(svm_model, X_test, y_test)
+
+# Step 8: Hyperparameter Tuning (optional)
+
+
+# Step 9: Model Comparison (already done in evaluation)
+
+# Step 10: Model Interpretation (e.g., coefficients for Logistic Regression)
+
+# Step 11: Model Deployment (not included here as it depends on the deployment environment)</code></pre><p id="70f9014a-9a90-4bbf-a463-231b7797d918" class="">
+</p><figure id="7412d8ee-2e5c-4318-87fc-9a925afbecfb" class="image"><a href="Breast%20Cancer%20Detection%20d6f84936aa854cc6b6a098d3b6b34a6b/Figure_1.png"><img style="width:1440px" src="Breast%20Cancer%20Detection%20d6f84936aa854cc6b6a098d3b6b34a6b/Figure_1.png"/></a></figure><p id="dd8c8807-7d3a-4b8e-a004-66f0cc40e2ed" class="">
+</p><figure id="a3916c57-6985-4275-8959-d5fc74e3fb88" class="image"><a href="Breast%20Cancer%20Detection%20d6f84936aa854cc6b6a098d3b6b34a6b/Figure_2.png"><img style="width:1000px" src="Breast%20Cancer%20Detection%20d6f84936aa854cc6b6a098d3b6b34a6b/Figure_2.png"/></a></figure><figure id="62185547-907a-4497-938c-3064ad96885c" class="image"><a href="Breast%20Cancer%20Detection%20d6f84936aa854cc6b6a098d3b6b34a6b/Figure_3.png"><img style="width:1440px" src="Breast%20Cancer%20Detection%20d6f84936aa854cc6b6a098d3b6b34a6b/Figure_3.png"/></a></figure><p id="947283d8-be47-45bd-82b7-9cbe507d6c06" class="">
+</p><p id="176854f4-afa6-49af-963d-f6a03db2c842" class="">
+</p><p id="7f26f1c3-df30-4988-885c-84f2d0f8d9df" class="">ID Diagnosis  Feature_1  Feature_2  ...  Feature_27  Feature_28  Feature_29  Feature_30
+0    842302         M      17.99      10.38  ...      0.7119      0.2654      0.4601     0.11890
+1    842517         M      20.57      17.77  ...      0.2416      0.1860      0.2750     0.08902
+2  84300903         M      19.69      21.25  ...      0.4504      0.2430      0.3613     0.08758
+3  84348301         M      11.42      20.38  ...      0.6869      0.2575      0.6638     0.17300
+4  84358402         M      20.29      14.34  ...      0.4000      0.1625      0.2364     0.07678</p><p id="cd7b4add-11f8-4918-bed5-ae902c361fa1" class="">[5 rows x 32 columns]
+ID   Feature_1   Feature_2  ...  Feature_28  Feature_29  Feature_30
+count  5.690000e+02  569.000000  569.000000  ...  569.000000  569.000000  569.000000
+mean   3.037183e+07   14.127292   19.289649  ...    0.114606    0.290076    0.083946
+std    1.250206e+08    3.524049    4.301036  ...    0.065732    0.061867    0.018061
+min    8.670000e+03    6.981000    9.710000  ...    0.000000    0.156500    0.055040
+25%    8.692180e+05   11.700000   16.170000  ...    0.064930    0.250400    0.071460
+50%    9.060240e+05   13.370000   18.840000  ...    0.099930    0.282200    0.080040
+75%    8.813129e+06   15.780000   21.800000  ...    0.161400    0.317900    0.092080
+max    9.113205e+08   28.110000   39.280000  ...    0.291000    0.663800    0.207500</p><p id="46befca3-369b-4bf1-99ac-2dd95f71733e" class="">[8 rows x 31 columns]
+&lt;class &#x27;pandas.core.frame.DataFrame&#x27;&gt;
+RangeIndex: 569 entries, 0 to 568
+Data columns (total 32 columns):</p><h1 id="d016d2da-2003-44ee-9c21-4dac34445088" class="">Column Non-Null Count Dtype</h1><hr id="e3415094-3d49-4491-8f03-33231006407b"/><p id="5f4c9403-3bf9-464d-8b12-7aa49e9b1404" class="">0   ID          569 non-null    int64</p><p id="a453078a-7ad8-4847-883e-a22d7037eb17" class="">1   Diagnosis   569 non-null    object
+2   Feature_1   569 non-null    float64
+3   Feature_2   569 non-null    float64
+4   Feature_3   569 non-null    float64
+5   Feature_4   569 non-null    float64
+6   Feature_5   569 non-null    float64
+7   Feature_6   569 non-null    float64
+8   Feature_7   569 non-null    float64
+9   Feature_8   569 non-null    float64
+10  Feature_9   569 non-null    float64
+11  Feature_10  569 non-null    float64
+12  Feature_11  569 non-null    float64
+13  Feature_12  569 non-null    float64
+14  Feature_13  569 non-null    float64
+15  Feature_14  569 non-null    float64
+16  Feature_15  569 non-null    float64
+17  Feature_16  569 non-null    float64
+18  Feature_17  569 non-null    float64
+19  Feature_18  569 non-null    float64
+20  Feature_19  569 non-null    float64
+21  Feature_20  569 non-null    float64
+22  Feature_21  569 non-null    float64
+23  Feature_22  569 non-null    float64
+24  Feature_23  569 non-null    float64
+25  Feature_24  569 non-null    float64
+26  Feature_25  569 non-null    float64
+27  Feature_26  569 non-null    float64
+28  Feature_27  569 non-null    float64
+29  Feature_28  569 non-null    float64
+30  Feature_29  569 non-null    float64
+31  Feature_30  569 non-null    float64
+dtypes: float64(30), int64(1), object(1)
+memory usage: 142.4+ KB
+None
+/Users/mohan/Desktop/Breast Cancer Detection/myenv/lib/python3.9/site-packages/sklearn/linear_model/_logistic.py:460: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. of ITERATIONS REACHED LIMIT.</p><p id="705b7ace-6a1f-4bd0-929d-a0514039706c" class="">Increase the number of iterations (max_iter) or scale the data as shown in:
+<a href="https://scikit-learn.org/stable/modules/preprocessing.html">https://scikit-learn.org/stable/modules/preprocessing.html</a>
+Please also refer to the documentation for alternative solver options:
+<a href="https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression">https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression</a>
+n_iter_i = _check_optimize_result(
+Logistic Regression Metrics:
+Accuracy: 0.96
+Precision: 0.97
+Recall: 0.91
+F1 Score: 0.94
+ROC-AUC: 1.00</p><p id="19ac0b9b-ff09-4574-8595-3698c13eef70" class="">Random Forest Metrics:
+Accuracy: 0.96
+Precision: 0.95
+Recall: 0.93
+F1 Score: 0.94
+ROC-AUC: 0.99</p><p id="5fff108a-a53e-4aec-99db-4ebb27856b9b" class="">SVM Metrics:
+Accuracy: 0.95
+Precision: 1.00
+Recall: 0.86
+F1 Score: 0.92
+ROC-AUC: 0.99</p></div></article></body></html>
